@@ -1,0 +1,75 @@
+import './style.css'
+
+type Product = {
+  slug: string
+  name: string
+  label: string
+  description: string
+  image: string
+  accent: string
+  features: string[]
+  privacy: string
+}
+
+const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/FORM_ID/viewform'
+
+const products: Product[] = [
+  {
+    slug: 'expiry-date-manager',
+    name: 'Expiry Date Manager',
+    label: '暮らしの期限を、見える化する',
+    description: '食品や日用品の期限をまとめて管理し、忘れがちな交換・消費のタイミングをそっと知らせます。',
+    image: 'images/expiry-date-manager.svg',
+    accent: 'coral',
+    features: ['期限を一覧で確認', '通知タイミングを自分で設定', '家族やチームで使いやすいシンプル設計'],
+    privacy: 'プライバシーポリシー本文を Google Site の掲載内容に置き換えてください。',
+  },
+  {
+    slug: 'external-touch-screen',
+    name: 'eXternalTouchScreen',
+    label: '離れた画面を、ひとつの操作感に',
+    description: '外部ディスプレイやタッチデバイスを、日々の作業に自然につなげるためのユーティリティです。',
+    image: 'images/external-touch-screen.svg',
+    accent: 'mint',
+    features: ['外部タッチ入力を扱いやすく整理', '作業環境に合わせてカスタマイズ', '軽快に動作する常駐ユーティリティ'],
+    privacy: 'プライバシーポリシー本文を Google Site の掲載内容に置き換えてください。',
+  },
+  {
+    slug: 'antiswipe',
+    name: 'antiSwipe',
+    label: '意図しないスワイプを、静かに防ぐ',
+    description: '画面に触れたときの意図しない操作を抑え、見る・読む・置いておく時間を守ります。',
+    image: 'images/antiswipe.svg',
+    accent: 'blue',
+    features: ['意図しないスワイプをブロック', '必要なときだけすぐ解除', '集中したい場面に寄り添う設計'],
+    privacy: 'プライバシーポリシー本文を Google Site の掲載内容に置き換えてください。',
+  },
+]
+
+const app = document.querySelector<HTMLDivElement>('#app')!
+
+function header() {
+  return `<header class="site-header"><a class="brand" href="#/" aria-label="CorporateTopへ戻る"><span class="brand-mark">C</span><span>CorporateTop</span></a><nav aria-label="メインナビゲーション"><a href="#about">会社紹介</a><a href="#products">製品</a><a class="nav-contact" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせ <span aria-hidden="true">↗</span></a></nav></header>`
+}
+
+function footer() {
+  return `<footer><div class="footer-brand"><span class="brand-mark">C</span><strong>CorporateTop</strong></div><p>暮らしの中の小さな不便を、ソフトウェアで整える。</p><small>© ${new Date().getFullYear()} CorporateTop</small></footer>`
+}
+
+function home() {
+  return `${header()}<main><section class="hero"><div class="hero-copy"><p class="eyebrow">SOFTWARE FOR EVERYDAY LIFE</p><h1>暮らしのそばに、<br><em>ちょうどいい</em>ソフトウェア。</h1><p class="hero-lede">CorporateTop は、生活の中にある「あと少し」を見つけ、毎日を軽くするアプリをつくっています。</p><a class="button button-dark" href="#products">製品を見る <span aria-hidden="true">↓</span></a></div><div class="hero-art" aria-label="日常を整えるソフトウェアのイメージ"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-note"><span class="note-dot"></span><span>small tools,<br>better days</span></div><div class="hero-panel"><div class="panel-top"><span></span><span></span><span></span></div><div class="panel-lines"><i></i><i></i><i></i></div><div class="panel-ring">03</div></div></div></section><section id="about" class="intro-section"><div class="section-index">01 / ABOUT</div><div><h2>生活支援のアプリを<br>ていねいに。</h2><p>大きな仕組みを増やすのではなく、日々の中で何度も使うものを、わかりやすく、気持ちよく。私たちは生活に寄り添う小さなソフトウェアを開発しています。</p></div></section><section id="products" class="products-section"><div class="section-heading"><div><p class="eyebrow">OUR PRODUCTS</p><h2>毎日を支える<br>3つの道具</h2></div><p>記録する。つなぐ。守る。<br>それぞれの場面に、専用の道具を。</p></div><div class="product-grid">${products.map((product, index) => `<a class="product-card accent-${product.accent}" href="#/product/${product.slug}"><div class="card-number">0${index + 1}</div><img src="${product.image}" alt="${product.name} の画面イメージ"><div class="card-body"><p class="card-label">${product.label}</p><h3>${product.name}</h3><span class="text-link">詳しく見る <span aria-hidden="true">↗</span></span></div></a>`).join('')}</div></section><section class="contact-strip"><div><p class="eyebrow">GET IN TOUCH</p><h2>ご質問やご相談は<br>お気軽に。</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせフォーム <span aria-hidden="true">↗</span></a></section></main>${footer()}`
+}
+
+function productPage(product: Product) {
+  return `${header()}<main class="product-page"><a class="back-link" href="#/">← 製品一覧へ戻る</a><section class="product-hero accent-${product.accent}"><div><p class="eyebrow">PRODUCT / ${product.slug.toUpperCase()}</p><h1>${product.name}</h1><p class="product-label">${product.label}</p><p class="hero-lede">${product.description}</p></div><div class="product-image"><img src="${product.image}" alt="${product.name} の画面イメージ"></div></section><section class="detail-grid"><div><p class="eyebrow">FEATURES</p><h2>使う人の毎日に、<br>自然になじむ機能。</h2></div><ul class="feature-list">${product.features.map((feature, index) => `<li><span>0${index + 1}</span><strong>${feature}</strong><i aria-hidden="true">↗</i></li>`).join('')}</ul></section><section class="privacy"><div><p class="eyebrow">PRIVACY POLICY</p><h2>プライバシー<br>ポリシー</h2></div><div class="privacy-copy"><p>${product.privacy}</p><p class="replace-note">※ 公開前に、Google Site に掲載中の正式な本文へ差し替えてください。</p></div></section><section class="contact-strip"><div><p class="eyebrow">QUESTIONS?</p><h2>製品について<br>お問い合わせください。</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">フォームを開く <span aria-hidden="true">↗</span></a></section></main>${footer()}`
+}
+
+function render() {
+  const slug = window.location.hash.match(/^#\/product\/(.+)$/)?.[1]
+  const product = products.find((item) => item.slug === slug)
+  app.innerHTML = product ? productPage(product) : home()
+  window.scrollTo({ top: 0, behavior: 'instant' })
+}
+
+window.addEventListener('hashchange', render)
+render()
