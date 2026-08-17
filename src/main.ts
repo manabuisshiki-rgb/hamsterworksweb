@@ -15,7 +15,7 @@ type Product = {
   formUrl?: string
 }
 
-const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfukmLPzPlqdynjy0gJYVWS8cR9vfqWD0fs5ZzvxSlfXPcLsw/viewform'
+const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeFIVAmqLBmGFbkh-ScSXhjg2Pke4hm59ikjNLFL1PLITn32w/viewform?embedded=true'
 
 const products: Product[] = [
   {
