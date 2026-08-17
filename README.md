@@ -1,4 +1,4 @@
-# CorporateTop
+# Hamster Works
 
 生活支援のソフトウェアを紹介する静的サイトです。Vite + TypeScript で構成し、GitHub Pages へ自動デプロイできます。
 
