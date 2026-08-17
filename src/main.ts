@@ -31,14 +31,15 @@ const products: Product[] = [
     disclaimer: '本アプリの機能・仕様・提供は予告なく変更または終了する場合があります。本アプリの使用により生じたいかなる損害（食品の廃棄・摂取による健康被害、データの消失、バックアップの破損・消失、その他直接的・間接的損害を含む）についても、開発者は一切の責任を負いません。バーコードスキャンによる商品情報の取得はOpen Food Factsのデータに依存しており、すべての商品に対応しているわけではありません。取得した情報の正確性は保証しません。',
   },
   {
-    slug: 'external-touch-screen',
-    name: 'eXternalTouchScreen',
-    label: '離れた画面を、ひとつの操作感に',
-    description: '外部ディスプレイやタッチデバイスを、日々の作業に自然につなげるためのユーティリティです。',
+    slug: 'external-touch-display',
+    name: 'eXternalTouchDisplay',
+    label: 'タブレット/スマートフォンをPCのタッチ対応サブディスプレイに。',
+    description: 'デスクトップを広く使いたいとき、プレゼン中に手元で操作したいとき、サブモニターをすぐに追加したいときに活用できます。Wi-Fiで接続し、タブレットから直接タッチ操作できます。',
     image: 'images/external-touch-screen.svg',
     accent: 'coral',
-    features: ['外部タッチ入力を扱いやすく整理', '作業環境に合わせてカスタマイズ', '軽快に動作する常駐ユーティリティ'],
+    features: ['機能概要\n■ iOSやAndroidのタブレットやスマートフォンをPCの外部ディスプレイとして活用\n■ デスクトップを拡張・複製表示\n■ タブレットから直接タッチ操作が可能\n■ フルスクリーン表示・画面回転にも対応', '用途\n■ 会議、プレゼン、作業用モニター、操作パネルに最適', '特徴\n■ レシーバーを自動検出して簡単接続\n■ 最大8台のタブレット接続に対応*\n■ Wi-Fi接続に対応\n■ WebRTCによる低遅延の映像ストリーミング\n■ 日本語・英語を含む多言語UI\n■ 広告なし（アプリ内課金・サブスクリプションあり）\n\n*お客様のハードウエア環境に依存します', 'システム要件\n1. ご利用のPCへのドライバアプリ(eXTDDriver)のインストールが必要（Windows Store）\n2. モバイル/タブレットアプリのダウンロードは、AppStore / Google Play から'],
     privacy: 'プライバシーポリシー本文を Google Site の掲載内容に置き換えてください。',
+    links: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdREUn4WAHsOkJZU5v8CdbB73mw2sM1PrGve_G1zJGemYmaOQ/viewform" target="_blank" rel="noreferrer">フィードバックフォーム ↗</a>',
   },
   {
     slug: 'antiswipe',
@@ -71,12 +72,12 @@ function productPage(product: Product) {
   const privacyHtml = product.privacy.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('')
   const supportHtml = product.support ? product.support.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('') : ''
   const disclaimerHtml = product.disclaimer ? `<section class="disclaimer"><p class="eyebrow">DISCLAIMER</p><h2>免責事項</h2><p>${product.disclaimer}</p></section>` : ''
-  return `${header()}<main class="product-page"><a class="back-link" href="#/">← 製品一覧へ戻る</a><section class="product-hero accent-${product.accent}"><div><p class="eyebrow">PRODUCT / ${product.slug.toUpperCase()}</p><h1>${product.name}</h1><p class="product-label">${product.label}</p><p class="hero-lede">${product.description}</p>${storeLinks}</div><div class="product-image"><img src="${product.image}" alt="${product.name} の画面イメージ"></div></section><section class="detail-grid"><div><p class="eyebrow">FEATURES</p><h2>Expiry Date Managerの機能と特徴</h2></div><ul class="feature-list">${product.features.map((feature, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span><strong>${feature}</strong><i aria-hidden="true">↗</i></li>`).join('')}</ul></section>${product.support ? `<section class="support"><div><p class="eyebrow">SUPPORT</p><h2>サポート</h2></div><div class="support-copy">${supportHtml}<a class="button button-dark" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">フィードバックフォーム ↗</a></div></section>` : ''}${disclaimerHtml}<section class="privacy"><div><p class="eyebrow">PRIVACY POLICY</p><h2>プライバシー<br>ポリシー</h2></div><div class="privacy-copy">${privacyHtml}</div></section><section class="contact-strip"><div><p class="eyebrow">QUESTIONS?</p><h2>製品について<br>お問い合わせください。</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">フォームを開く <span aria-hidden="true">↗</span></a></section></main>${footer()}`
+  return `${header()}<main class="product-page"><a class="back-link" href="#/">← 製品一覧へ戻る</a><section class="product-hero accent-${product.accent}"><div><p class="eyebrow">PRODUCT / ${product.slug.toUpperCase()}</p><h1>${product.name}</h1><p class="product-label">${product.label}</p><p class="hero-lede">${product.description}</p>${storeLinks}</div><div class="product-image"><img src="${product.image}" alt="${product.name} の画面イメージ"></div></section><section class="detail-grid"><div><p class="eyebrow">FEATURES</p><h2>${product.name}の機能と特徴</h2></div><ul class="feature-list">${product.features.map((feature, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span><strong>${feature}</strong><i aria-hidden="true">↗</i></li>`).join('')}</ul></section>${product.support ? `<section class="support"><div><p class="eyebrow">SUPPORT</p><h2>サポート</h2></div><div class="support-copy">${supportHtml}<a class="button button-dark" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">フィードバックフォーム ↗</a></div></section>` : ''}${disclaimerHtml}<section class="privacy"><div><p class="eyebrow">PRIVACY POLICY</p><h2>プライバシー<br>ポリシー</h2></div><div class="privacy-copy">${privacyHtml}</div></section><section class="contact-strip"><div><p class="eyebrow">QUESTIONS?</p><h2>製品について<br>お問い合わせください。</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">フォームを開く <span aria-hidden="true">↗</span></a></section></main>${footer()}`
 }
 
 function render() {
   const slug = window.location.hash.match(/^#\/product\/(.+)$/)?.[1]
-  const product = products.find((item) => item.slug === slug)
+  const product = products.find((item) => item.slug === slug || (slug === 'external-touch-screen' && item.slug === 'external-touch-display'))
   app.innerHTML = product ? productPage(product) : home()
   window.scrollTo({ top: 0, behavior: 'instant' })
 }
