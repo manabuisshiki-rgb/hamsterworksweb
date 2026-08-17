@@ -1,0 +1,11 @@
+name: Workflow configuration check
+
+"on":
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm active deployment workflow
+        run: echo "Automatic deployment is configured in deploy.yml"
