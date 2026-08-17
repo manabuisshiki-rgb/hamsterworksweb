@@ -1,0 +1,11 @@
+name: Legacy workflow check
+
+"on":
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm workflow configuration
+        run: echo "The active deployment workflow is deploy.yml"
