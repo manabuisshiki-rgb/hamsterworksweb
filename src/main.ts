@@ -18,6 +18,7 @@ type Product = {
 }
 
 const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeFIVAmqLBmGFbkh-ScSXhjg2Pke4hm59ikjNLFL1PLITn32w/viewform?embedded=true'
+const HAMSTER_MARK = '<svg class="hamster-mark-svg" viewBox="0 0 40 32" focusable="false"><g class="wheel-spin"><circle cx="20" cy="15" r="13" fill="var(--paper)" stroke="var(--blue)" stroke-width="2"/><path d="M20 2v26M7 15h26M10.8 5.8l18.4 18.4M29.2 5.8 10.8 24.2" fill="none" stroke="var(--blue)" stroke-width=".6" opacity=".75"/><circle cx="20" cy="15" r="2.1" fill="var(--yellow)"/></g></svg>'
 
 const products: Product[] = [
   {
@@ -66,11 +67,11 @@ const products: Product[] = [
 const app = document.querySelector<HTMLDivElement>('#app')!
 
 function header() {
-  return `<header class="site-header"><a class="brand" href="#/" aria-label="Hamster Worksへ戻る"><span class="brand-mark">H</span><span>Hamster Works</span></a><nav aria-label="メインナビゲーション"><a href="#about">会社紹介</a><a href="#products">製品</a><a class="nav-contact" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせ <span aria-hidden="true">↗</span></a></nav></header>`
+  return `<header class="site-header"><a class="brand" href="#/" aria-label="Hamster Worksへ戻る"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><span>Hamster Works</span></a><nav aria-label="メインナビゲーション"><a href="#about">会社紹介</a><a href="#products">製品</a><a class="nav-contact" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせ <span aria-hidden="true">↗</span></a></nav></header>`
 }
 
 function footer() {
-  return `<footer><div class="footer-brand"><span class="brand-mark">H</span><strong>Hamster Works</strong></div><p>暮らしの中の小さな不便を、ソフトウェアで整える。</p><small>© ${new Date().getFullYear()} Hamster Works</small></footer>`
+  return `<footer><div class="footer-brand"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><strong>Hamster Works</strong></div><p>暮らしの中の小さな不便を、ソフトウェアで整える。</p><small>© ${new Date().getFullYear()} Hamster Works</small></footer>`
 }
 
 function home() {
