@@ -1,4 +1,5 @@
 import './style.css'
+import { getCopy, getLanguage, languages, productCopy, productDetails, setLanguage, type Language } from './i18n'
 
 type Product = {
   slug: string
@@ -65,27 +66,49 @@ const products: Product[] = [
 ]
 
 const app = document.querySelector<HTMLDivElement>('#app')!
+let currentLanguage = getLanguage()
+let currentCopy = getCopy(currentLanguage)
+
+const localizedProduct = (product: Product) => {
+  if (currentLanguage === 'ja') return product
+  const localized = { ...product, ...productCopy[currentLanguage][product.slug], ...productDetails[currentLanguage][product.slug] }
+  if (product.slug === 'external-touch-display') localized.links = `<a href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">${currentCopy.feedbackButton}</a>`
+  return localized
+}
+
+const languageSelector = () => `<label class="language-switcher"><span class="sr-only">Language</span><select data-language aria-label="Language">${Object.entries(languages).map(([code, name]) => `<option value="${code}"${code === currentLanguage ? ' selected' : ''}>${name}</option>`).join('')}</select></label>`
+
+const bindLanguageSelector = () => {
+  document.querySelector<HTMLSelectElement>('[data-language]')?.addEventListener('change', (event) => {
+    const language = (event.target as HTMLSelectElement).value as Language
+    setLanguage(language)
+    currentLanguage = language
+    currentCopy = getCopy(language)
+    render()
+  })
+}
 
 function header() {
-  return `<header class="site-header"><a class="brand" href="#/" aria-label="Hamster Worksへ戻る"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><span>Hamster Works</span></a><nav aria-label="メインナビゲーション"><a href="#about">会社紹介</a><a href="#products">製品</a><a class="nav-contact" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせ <span aria-hidden="true">↗</span></a></nav></header>`
+  return `<header class="site-header"><a class="brand" href="#/" aria-label="Hamster Works"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><span>Hamster Works</span></a><nav aria-label="${currentCopy.navProducts}"><a href="#about">${currentCopy.navAbout}</a><a href="#products">${currentCopy.navProducts}</a><a class="nav-contact" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">${currentCopy.navContact} <span aria-hidden="true">↗</span></a>${languageSelector()}</nav></header>`
 }
 
 function footer() {
-  return `<footer><div class="footer-brand"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><strong>Hamster Works</strong></div><p>毎日をちょっとだけプラス。</p><small>© ${new Date().getFullYear()} Hamster Works</small></footer>`
+  return `<footer><div class="footer-brand"><span class="brand-mark" aria-hidden="true">${HAMSTER_MARK}</span><strong>Hamster Works</strong></div><p>${currentCopy.footerDescription}</p><small>© ${new Date().getFullYear()} Hamster Works</small></footer>`
 }
 
 function home() {
-  return `${header()}<main><section class="hero"><div class="hero-copy"><p class="eyebrow">SOFTWARE FOR EVERYDAY LIFE</p><h1>あなたに寄り添う、<br><em>ちょうどいい</em>をつくってます。</h1><p class="hero-lede">Hamster Works は、毎日の中の「あと少し」を見つけてはやっつけるために走り続けます。</p><a class="button button-dark" href="#products">製品を見る <span aria-hidden="true">↓</span></a></div><div class="hero-art" aria-label="日常を整えるソフトウェアのイメージ"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-note"><span class="note-dot"></span><span>small tools,<br>better days</span></div><div class="hero-panel"><div class="panel-top"><span></span><span></span><span></span></div><div class="panel-lines"><i></i><i></i><i></i></div><div class="panel-ring">03</div></div></div></section><section id="about" class="intro-section"><div class="section-index">01 / ABOUT</div><div><h2>ちょっとしたことに<br>取り組もう。</h2><p>日々の中で何度も使うものを、わかりやすく、楽ちんに。Hamster Worksは生活に寄り添う小さな幸せを育みます。</p></div></section><section id="products" class="products-section"><div class="section-heading"><div><p class="eyebrow">OUR PRODUCTS</p><h2>毎日をちょっとだけ<br>プラス。</h2></div></div><div class="product-grid">${products.map((product, index) => `<a class="product-card accent-${product.accent}" href="#/product/${product.slug}"><div class="card-number">0${index + 1}</div><img src="${product.image}" alt="${product.name} の画面イメージ"><div class="card-body"><p class="card-label">${product.label}</p><h3 class="card-title">${product.icon ? `<img class="card-icon" src="${product.icon}" alt="">` : ''}<span>${product.name}</span></h3><span class="text-link">詳しく見る <span aria-hidden="true">↗</span></span></div></a>`).join('')}</div></section><section class="contact-strip"><div><p class="eyebrow">GET IN TOUCH</p><h2>お問い合わせはこちらから。</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">お問い合わせフォーム <span aria-hidden="true">↗</span></a></section></main>${footer()}`
+  return `${header()}<main><section class="hero"><div class="hero-copy"><p class="eyebrow">${currentCopy.homeEyebrow}</p><h1>${currentCopy.homeTitleBefore}<br><em>${currentCopy.homeTitleEmphasis}</em>${currentCopy.homeTitleAfter}</h1><p class="hero-lede">${currentCopy.homeDescription}</p><a class="button button-dark" href="#products">${currentCopy.viewProducts} <span aria-hidden="true">↓</span></a></div><div class="hero-art" aria-label="Software for everyday life"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-note"><span class="note-dot"></span><span>small tools,<br>better days</span></div><div class="hero-panel"><div class="panel-top"><span></span><span></span><span></span></div><div class="panel-lines"><i></i><i></i><i></i></div><div class="panel-ring">03</div></div></div></section><section id="about" class="intro-section"><div class="section-index">${currentCopy.aboutIndex}</div><div><h2>${currentCopy.aboutTitle}</h2><p>${currentCopy.aboutDescription}</p></div></section><section id="products" class="products-section"><div class="section-heading"><div><p class="eyebrow">${currentCopy.productsEyebrow}</p><h2>${currentCopy.productsTitle}</h2></div></div><div class="product-grid">${products.map((product, index) => { const localized = localizedProduct(product); return `<a class="product-card accent-${localized.accent}" href="#/product/${localized.slug}"><div class="card-number">0${index + 1}</div><img src="${localized.image}" alt="${localized.name}"><div class="card-body"><p class="card-label">${localized.label}</p><h3 class="card-title">${localized.icon ? `<img class="card-icon" src="${localized.icon}" alt="">` : ''}<span>${localized.name}</span></h3><span class="text-link">${currentCopy.viewProducts} <span aria-hidden="true">↗</span></span></div></a>` }).join('')}</div></section><section class="contact-strip"><div><p class="eyebrow">${currentCopy.contactEyebrow}</p><h2>${currentCopy.contactTitle}</h2></div><a class="button button-light" href="${CONTACT_FORM_URL}" target="_blank" rel="noreferrer">${currentCopy.contactButton} <span aria-hidden="true">↗</span></a></section></main>${footer()}`
 }
 
 function productPage(product: Product) {
+  product = localizedProduct(product)
   const storeLinks = product.links ? `<div class="store-links">${product.links}</div>` : ''
-  const galleryHtml = product.gallery ? product.gallery.length > 1 ? `<div class="feature-gallery" data-gallery><button class="gallery-image-button" type="button" aria-label="画像を切り替える"><img src="${product.gallery[0]}" alt="${product.name} の紹介画像 1"></button><div class="gallery-dots" role="tablist" aria-label="紹介画像の選択">${product.gallery.map((_, index) => `<button type="button" role="tab" aria-selected="${index === 0}" aria-label="紹介画像 ${index + 1}" data-gallery-index="${index}"></button>`).join('')}</div></div>` : `<div class="feature-gallery"><img class="gallery-static-image" style="width:504px;max-width:100%;height:auto" src="${product.gallery[0]}" alt="${product.name} の利用シーン"></div>` : ''
+  const galleryHtml = product.gallery ? product.gallery.length > 1 ? `<div class="feature-gallery" data-gallery><button class="gallery-image-button" type="button" aria-label="${currentCopy.viewProducts}"><img src="${product.gallery[0]}" alt="${product.name}"></button><div class="gallery-dots" role="tablist" aria-label="${currentCopy.featuresEyebrow}">${product.gallery.map((_, index) => `<button type="button" role="tab" aria-selected="${index === 0}" aria-label="${index + 1}" data-gallery-index="${index}"></button>`).join('')}</div></div>` : `<div class="feature-gallery"><img class="gallery-static-image" style="width:504px;max-width:100%;height:auto" src="${product.gallery[0]}" alt="${product.name}"></div>` : ''
   const privacyHtml = product.privacy.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('')
   const supportHtml = product.support ? product.support.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('') : ''
-  const disclaimerHtml = product.disclaimer ? `<section class="disclaimer"><p class="eyebrow">DISCLAIMER</p><h2>免責事項</h2><p>${product.disclaimer}</p></section>` : ''
+  const disclaimerHtml = product.disclaimer ? `<section class="disclaimer"><p class="eyebrow">DISCLAIMER</p><h2>${currentCopy.disclaimerTitle}</h2><p>${product.disclaimer}</p></section>` : ''
   const formUrl = product.formUrl ?? CONTACT_FORM_URL
-  return `${header()}<main class="product-page"><a class="back-link" href="#/">← 製品一覧へ戻る</a><section class="product-hero accent-${product.accent}"><div><p class="eyebrow">PRODUCT / ${product.slug.toUpperCase()}</p><div class="product-title">${product.icon ? `<img src="${product.icon}" alt="${product.name} のアイコン">` : ''}<h1>${product.name}</h1></div><p class="product-label">${product.label}</p><p class="hero-lede">${product.description}</p>${storeLinks}</div><div class="product-image"><img src="${product.image}" alt="${product.name} の画面イメージ"></div></section><section class="detail-grid"><div><p class="eyebrow">FEATURES</p><h2>${product.name}の機能と特徴</h2>${galleryHtml}</div><ul class="feature-list">${product.features.map((feature, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span><strong>${feature}</strong><i aria-hidden="true">↗</i></li>`).join('')}</ul></section>${product.support ? `<section class="support"><div><p class="eyebrow">SUPPORT</p><h2>サポート</h2></div><div class="support-copy">${supportHtml}<a class="button button-dark" href="${formUrl}" target="_blank" rel="noreferrer">フィードバックフォーム ↗</a></div></section>` : ''}${disclaimerHtml}<section class="privacy"><div><p class="eyebrow">PRIVACY POLICY</p><h2>プライバシー<br>ポリシー</h2></div><div class="privacy-copy">${privacyHtml}</div></section><section class="contact-strip"><div><p class="eyebrow">QUESTIONS?</p><h2>製品についての<br>お問い合わせはこちらから。</h2></div><a class="button button-light" href="${formUrl}" target="_blank" rel="noreferrer">フォームを開く <span aria-hidden="true">↗</span></a></section></main>${footer()}`
+  return `${header()}<main class="product-page"><a class="back-link" href="#/">${currentCopy.backToProducts}</a><section class="product-hero accent-${product.accent}"><div><p class="eyebrow">${currentCopy.productEyebrow} / ${product.slug.toUpperCase()}</p><div class="product-title">${product.icon ? `<img src="${product.icon}" alt="${product.name}">` : ''}<h1>${product.name}</h1></div><p class="product-label">${product.label}</p><p class="hero-lede">${product.description}</p>${storeLinks}</div><div class="product-image"><img src="${product.image}" alt="${product.name}"></div></section><section class="detail-grid"><div><p class="eyebrow">${currentCopy.featuresEyebrow}</p><h2>${product.name}${currentCopy.featuresTitle}</h2>${galleryHtml}</div><ul class="feature-list">${product.features.map((feature, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span><strong>${feature}</strong><i aria-hidden="true">↗</i></li>`).join('')}</ul></section>${product.support ? `<section class="support"><div><p class="eyebrow">${currentCopy.supportEyebrow}</p><h2>${currentCopy.supportTitle}</h2></div><div class="support-copy">${supportHtml}<a class="button button-dark" href="${formUrl}" target="_blank" rel="noreferrer">${currentCopy.feedbackButton}</a></div></section>` : ''}${disclaimerHtml}<section class="privacy"><div><p class="eyebrow">${currentCopy.privacyEyebrow}</p><h2>${currentCopy.privacyTitle}</h2></div><div class="privacy-copy">${privacyHtml}</div></section><section class="contact-strip"><div><p class="eyebrow">${currentCopy.questionsEyebrow}</p><h2>${currentCopy.productContactTitle}</h2></div><a class="button button-light" href="${formUrl}" target="_blank" rel="noreferrer">${currentCopy.formButton} <span aria-hidden="true">↗</span></a></section></main>${footer()}`
 }
 
 function initGallery() {
@@ -100,7 +123,7 @@ function initGallery() {
   const showImage = (index: number) => {
     currentIndex = (index + images.length) % images.length
     image.src = images[currentIndex]
-    image.alt = `Expiry Date Manager の紹介画像 ${currentIndex + 1}`
+    image.alt = `${currentCopy.featuresEyebrow} ${currentIndex + 1}`
     dots.forEach((dot, dotIndex) => dot.setAttribute('aria-selected', String(dotIndex === currentIndex)))
   }
   imageButton.addEventListener('click', () => showImage(currentIndex + 1))
@@ -113,10 +136,12 @@ function initGallery() {
 }
 
 function render() {
+  document.documentElement.lang = currentLanguage
   const slug = window.location.hash.match(/^#\/product\/(.+)$/)?.[1]
   const product = products.find((item) => item.slug === slug || (slug === 'external-touch-screen' && item.slug === 'external-touch-display'))
   app.innerHTML = product ? productPage(product) : home()
   initGallery()
+  bindLanguageSelector()
   window.scrollTo({ top: 0, behavior: 'instant' })
 }
 
