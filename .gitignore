@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local design assets and starter files
+public/images/Header01-4096x2304.jpg
+public/images/Header01.png
+public/images/Header02-4096x2304.jpg
+public/images/Header02.png
+src/assets/
+src/counter.ts
